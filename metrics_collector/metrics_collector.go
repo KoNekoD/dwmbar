@@ -11,6 +11,7 @@ import (
 	"main/state_providers/keyboard_layout"
 	"main/state_providers/network_connection_state"
 	"main/state_providers/network_stat"
+	"main/state_providers/notifications_state"
 	"main/state_providers/volume_state"
 	"main/util"
 	"sync"
@@ -48,6 +49,7 @@ func (c *DwmBarMetricsCollector) collectAllMetrics() {
 	c.updateKeyboardLayout()
 	c.updateVolumeState()
 	c.updateBrightnessState()
+	c.updateNotificationsState()
 }
 
 func (c *DwmBarMetricsCollector) callMethods(methods []func()) {
@@ -74,6 +76,7 @@ func (c *DwmBarMetricsCollector) collectEverySecondsMetrics() {
 		c.updateKeyboardLayout,
 		c.updateVolumeState,
 		c.updateBrightnessState,
+		c.updateNotificationsState,
 	}
 
 	c.callMethods(methods)
@@ -231,4 +234,17 @@ func (c *DwmBarMetricsCollector) updateBrightnessState() {
 	}
 
 	c.snapshot.BrightnessState = *brightnessState
+}
+
+func (c *DwmBarMetricsCollector) updateNotificationsState() {
+	if c.config.NoNotificationsState {
+		return
+	}
+
+	notificationsState, err := notifications_state.Get()
+	if c.checker.ErrorFound(err) {
+		return
+	}
+
+	c.snapshot.NotificationsState = *notificationsState
 }

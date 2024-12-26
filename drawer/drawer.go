@@ -13,6 +13,7 @@ import (
 	"main/state_providers/keyboard_layout"
 	"main/state_providers/network_connection_state"
 	"main/state_providers/network_stat"
+	"main/state_providers/notifications_state"
 	"main/state_providers/volume_state"
 	"main/util"
 	"time"
@@ -47,6 +48,7 @@ func (d *Drawer) redraw() {
 	d.drawNetworkState(d.s.NetworkState)
 	d.drawPowerState(d.s.BatteryState)
 	d.drawKeyboardLayout(d.s.KeyboardLayout)
+	d.drawNotificationsDisabled(d.s.NotificationsState)
 	d.drawClock(d.s.NowDateTime)
 	d.print()
 }
@@ -308,6 +310,34 @@ func (d *Drawer) drawClock(clockTime time.Time) {
 		),
 	)
 	d.add(date)
+}
+
+func (d *Drawer) blinkOneSecond() int64 {
+	return time.Now().Unix() % 2 // 0 or 1
+}
+
+func (d *Drawer) drawNotificationsDisabled(state notifications_state.Stats) {
+	if d.c.NoNotificationsState {
+		return
+	}
+
+	if state.IsDisabled {
+		var color string
+
+		if d.c.EnableNotificationsStateBgBlinking && 0 == d.blinkOneSecond() {
+			color = d.t.Orange
+		} else {
+			color = d.t.Cyan
+		}
+
+		date := fmt.Sprintf(
+			drawer_templates.NotificationsDisabled,
+			color,
+			d.t.Black,
+			color,
+		)
+		d.add(date)
+	}
 }
 
 func (d *Drawer) print() {
