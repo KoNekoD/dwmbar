@@ -294,20 +294,25 @@ func (d *Drawer) drawKeyboardLayout(stats keyboard_layout.Stats) {
 }
 
 func (d *Drawer) drawClock(clockTime time.Time) {
-	var clockMonth string
+	var (
+		clockMonth   string
+		clockWeekDay string
+	)
+
 	switch d.c.Lang {
 	case "ru":
 		clockMonth = drawer_templates.GetClockMonthRu(clockTime.Month())
+		clockWeekDay = drawer_templates.GetClockWeekDayRu(clockTime.Weekday())
 	case "en":
 		clockMonth = drawer_templates.GetClockMonthEn(clockTime.Month())
+		clockWeekDay = drawer_templates.GetClockWeekDayEn(clockTime.Weekday())
 	default:
 		str := "Invalid language(use default 'ru'): " + d.c.Lang
 		d.checker.ErrorFound(errors.New(str))
 
 		clockMonth = drawer_templates.GetClockMonthRu(clockTime.Month())
+		clockWeekDay = drawer_templates.GetClockWeekDayRu(clockTime.Weekday())
 	}
-
-	clockWeekDay := drawer_templates.GetClockWeekDay(clockTime.Weekday())
 
 	date := fmt.Sprintf(
 		drawer_templates.Clock,

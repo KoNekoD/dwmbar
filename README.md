@@ -15,7 +15,11 @@ Add `~/.dwm/bin/dwmbar` to x init file
 
 Show only time:
 ```shell
-dwmbar --noBrightness -noCpu -noLang -noMemory -noNetworkStats -noNetworkState -noPowerState -noTemp -noVolume
+# Russian
+dwmbar --noBrightness -noCpu -noLang -noMemory -noNetworkStats -noNetworkState -noPowerState -noTemp -noVolume -noNotificationsState -enableNotificationsStateBgBlinking --lang=ru
+
+# English
+dwmbar --noBrightness -noCpu -noLang -noMemory -noNetworkStats -noNetworkState -noPowerState -noTemp -noVolume -noNotificationsState -enableNotificationsStateBgBlinking --lang=en
 ```
 
 ## Screenshot:

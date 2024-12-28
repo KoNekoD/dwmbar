@@ -37,6 +37,31 @@ func GetClockMonthRu(month time.Month) string {
 	return clockMonth
 }
 
+func GetClockWeekDayRu(weekday time.Weekday) string {
+	var clockWeekDay string
+
+	switch weekday {
+	case time.Sunday:
+		clockWeekDay = "Вс"
+	case time.Monday:
+		clockWeekDay = "Пн"
+	case time.Tuesday:
+		clockWeekDay = "Вт"
+	case time.Wednesday:
+		clockWeekDay = "Ср"
+	case time.Thursday:
+		clockWeekDay = "Чт"
+	case time.Friday:
+		clockWeekDay = "Пт"
+	case time.Saturday:
+		clockWeekDay = "Сб"
+	default:
+		clockWeekDay = "invalid weekday"
+	}
+
+	return clockWeekDay
+}
+
 func GetClockMonthEn(month time.Month) string {
 	var clockMonth string
 
@@ -72,24 +97,24 @@ func GetClockMonthEn(month time.Month) string {
 	return clockMonth
 }
 
-func GetClockWeekDay(weekday time.Weekday) string {
+func GetClockWeekDayEn(weekday time.Weekday) string {
 	var clockWeekDay string
 
 	switch weekday {
 	case time.Sunday:
-		clockWeekDay = "Вс"
+		clockWeekDay = "Sun"
 	case time.Monday:
-		clockWeekDay = "Пн"
+		clockWeekDay = "Mon"
 	case time.Tuesday:
-		clockWeekDay = "Вт"
+		clockWeekDay = "Tue"
 	case time.Wednesday:
-		clockWeekDay = "Ср"
+		clockWeekDay = "Wed"
 	case time.Thursday:
-		clockWeekDay = "Чт"
+		clockWeekDay = "Thu"
 	case time.Friday:
-		clockWeekDay = "Пт"
+		clockWeekDay = "Fri"
 	case time.Saturday:
-		clockWeekDay = "Сб"
+		clockWeekDay = "Sat"
 	default:
 		clockWeekDay = "invalid weekday"
 	}
