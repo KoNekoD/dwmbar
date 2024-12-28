@@ -27,5 +27,5 @@ const (
 	Bat                       = "%s%s%d%% "
 	KeyboardLayout            = "^c%s^^b%s^^c%s^^b%s^ 󰌌 %s "
 	Clock                     = "^c%s^^c%s^^b%s^ 󱑍 %s "
-	NotificationsDisabled     = "^c%s^^c%s^^b%s^ 󰂛"
+	NotificationsDisabled     = "^c%s^^c%s^^b%s^  󰂛 "
 )

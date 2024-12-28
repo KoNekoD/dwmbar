@@ -1,7 +1,6 @@
 package battery_state
 
 import (
-	"errors"
 	"github.com/distatus/battery"
 )
 
@@ -20,18 +19,15 @@ func (e *BatteryStateError) Error() string {
 
 func Get() (*Stats, error) {
 	batteries, err := battery.GetAll()
-	if err != nil {
-		return nil, &BatteryStateError{
-			message: "Could not get battery info!",
+
+	for i, b := range batteries {
+		if err == nil || err.(battery.Errors)[i] == nil {
+			return &Stats{
+				State:   b.State.String(),
+				Percent: int(b.Current / b.Full * 100),
+			}, nil
 		}
 	}
 
-	for _, bat := range batteries {
-		return &Stats{
-			State:   bat.State.String(),
-			Percent: int(bat.Current / bat.Full * 100),
-		}, nil
-	}
-
-	return nil, errors.New("can't find battery")
+	return nil, &BatteryStateError{message: "Could not get battery info!"}
 }

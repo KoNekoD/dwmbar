@@ -2,7 +2,7 @@ package drawer_templates
 
 import "time"
 
-func GetClockMonth(month time.Month) string {
+func GetClockMonthRu(month time.Month) string {
 	var clockMonth string
 
 	switch month {
@@ -30,6 +30,41 @@ func GetClockMonth(month time.Month) string {
 		clockMonth = "Ноя"
 	case time.December:
 		clockMonth = "Дек"
+	default:
+		clockMonth = "invalid month"
+	}
+
+	return clockMonth
+}
+
+func GetClockMonthEn(month time.Month) string {
+	var clockMonth string
+
+	switch month {
+	case time.January:
+		clockMonth = "Jan"
+	case time.February:
+		clockMonth = "Feb"
+	case time.March:
+		clockMonth = "Mar"
+	case time.April:
+		clockMonth = "Apr"
+	case time.May:
+		clockMonth = "May"
+	case time.June:
+		clockMonth = "Jun"
+	case time.July:
+		clockMonth = "Jul"
+	case time.August:
+		clockMonth = "Aug"
+	case time.September:
+		clockMonth = "Sep"
+	case time.October:
+		clockMonth = "Oct"
+	case time.November:
+		clockMonth = "Nov"
+	case time.December:
+		clockMonth = "Dec"
 	default:
 		clockMonth = "invalid month"
 	}

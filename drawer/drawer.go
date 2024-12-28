@@ -1,6 +1,7 @@
 package drawer
 
 import (
+	"errors"
 	"fmt"
 	"github.com/inhies/go-bytesize"
 	"log"
@@ -20,10 +21,11 @@ import (
 )
 
 type Drawer struct {
-	s  *snapshot.DwmBarStatsSnapshot
-	_v string
-	t  *drawer_theme.Theme
-	c  *util.Config
+	s       *snapshot.DwmBarStatsSnapshot
+	_v      string
+	t       *drawer_theme.Theme
+	c       *util.Config
+	checker *util.ErrorChecker
 }
 
 func (d *Drawer) Run() {
@@ -57,8 +59,9 @@ func NewDwmBarDrawer(
 	theme *drawer_theme.Theme,
 	snapshot *snapshot.DwmBarStatsSnapshot,
 	config *util.Config,
+	checker *util.ErrorChecker,
 ) *Drawer {
-	return &Drawer{t: theme, s: snapshot, c: config}
+	return &Drawer{t: theme, s: snapshot, c: config, checker: checker}
 }
 
 func (d *Drawer) add(string string) *Drawer {
@@ -291,7 +294,18 @@ func (d *Drawer) drawKeyboardLayout(stats keyboard_layout.Stats) {
 }
 
 func (d *Drawer) drawClock(clockTime time.Time) {
-	clockMonth := drawer_templates.GetClockMonth(clockTime.Month())
+	var clockMonth string
+	switch d.c.Lang {
+	case "ru":
+		clockMonth = drawer_templates.GetClockMonthRu(clockTime.Month())
+	case "en":
+		clockMonth = drawer_templates.GetClockMonthEn(clockTime.Month())
+	default:
+		str := "Invalid language(use default 'ru'): " + d.c.Lang
+		d.checker.ErrorFound(errors.New(str))
+
+		clockMonth = drawer_templates.GetClockMonthRu(clockTime.Month())
+	}
 
 	clockWeekDay := drawer_templates.GetClockWeekDay(clockTime.Weekday())
 
