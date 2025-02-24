@@ -13,6 +13,7 @@ import (
 	"main/state_providers/network_stat"
 	"main/state_providers/notifications_state"
 	"main/state_providers/volume_state"
+	"main/state_providers/weather_state"
 	"main/util"
 	"sync"
 	"time"
@@ -50,6 +51,7 @@ func (c *DwmBarMetricsCollector) collectAllMetrics() {
 	c.updateVolumeState()
 	c.updateBrightnessState()
 	c.updateNotificationsState()
+	c.updateWeather()
 }
 
 func (c *DwmBarMetricsCollector) callMethods(methods []func()) {
@@ -77,6 +79,7 @@ func (c *DwmBarMetricsCollector) collectEverySecondsMetrics() {
 		c.updateVolumeState,
 		c.updateBrightnessState,
 		c.updateNotificationsState,
+		c.updateWeather,
 	}
 
 	c.callMethods(methods)
@@ -107,9 +110,21 @@ func (c *DwmBarMetricsCollector) Run() {
 	}
 }
 
-// FirstCollect Proxy method for extra case
 func (c *DwmBarMetricsCollector) FirstCollect() {
 	c.collectAllMetrics()
+}
+
+func (c *DwmBarMetricsCollector) updateWeather() {
+	if c.config.NoWeatherState {
+		return
+	}
+
+	weather, err := weather_state.Get()
+	if c.checker.ErrorFound(err) {
+		return
+	}
+
+	c.snapshot.WeatherState = weather
 }
 
 func (c *DwmBarMetricsCollector) updateCpu() {
