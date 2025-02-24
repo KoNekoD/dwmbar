@@ -16,9 +16,20 @@ import (
 	"main/state_providers/network_stat"
 	"main/state_providers/notifications_state"
 	"main/state_providers/volume_state"
+	"main/state_providers/weather_state"
 	"main/util"
 	"time"
 )
+
+var batteryStatusMap = map[string]string{
+	"Full":         drawer_templates.BatPartFull,
+	"Discharging":  drawer_templates.BatPartDischarging,
+	"Charging":     drawer_templates.BatPartCharging,
+	"Not charging": drawer_templates.BatPartNotCharging,
+	"Unknown":      drawer_templates.BatPartUnknown,
+	"Empty":        "Empty",
+	"Idle":         "Idle",
+}
 
 type Drawer struct {
 	s       *snapshot.DwmBarStatsSnapshot
@@ -51,6 +62,7 @@ func (d *Drawer) redraw() {
 	d.drawPowerState(d.s.BatteryState)
 	d.drawKeyboardLayout(d.s.KeyboardLayout)
 	d.drawNotificationsDisabled(d.s.NotificationsState)
+	d.drawWeather(d.s.WeatherState)
 	d.drawClock(d.s.NowDateTime)
 	d.print()
 }
@@ -67,6 +79,22 @@ func NewDwmBarDrawer(
 func (d *Drawer) add(string string) *Drawer {
 	d._v = d._v + string
 	return d
+}
+
+func (d *Drawer) drawWeather(stats *weather_state.Stats) {
+	if d.c.NoWeatherState {
+		return
+	}
+
+	result := fmt.Sprintf(
+		drawer_templates.Weather,
+		d.t.Black,
+		d.t.Black,
+		d.t.Green,
+		stats.Temperature,
+	)
+
+	d.add(result)
 }
 
 func (d *Drawer) drawNetworkStat(stats network_stat.Stats) {
@@ -234,25 +262,8 @@ func (d *Drawer) drawPowerState(s battery_state.Stats) {
 		return
 	}
 
-	var status string
-
-	// see github.com/distatus/battery@v0.11.0/battery.go:64 (states variable)
-	switch s.State {
-	case "Full":
-		status = drawer_templates.BatPartFull
-	case "Discharging":
-		status = drawer_templates.BatPartDischarging
-	case "Charging":
-		status = drawer_templates.BatPartCharging
-	case "Not charging":
-		status = drawer_templates.BatPartNotCharging
-	case "Unknown":
-		status = drawer_templates.BatPartUnknown
-	case "Empty":
-		status = "Empty"
-	case "Idle":
-		status = "Idle"
-	default:
+	status, exists := batteryStatusMap[s.State]
+	if !exists {
 		status = drawer_templates.BatPartUndefined
 	}
 
@@ -261,18 +272,10 @@ func (d *Drawer) drawPowerState(s battery_state.Stats) {
 		warn = drawer_templates.BatPartWarningSymbol
 	}
 
-	value := fmt.Sprintf(
-		drawer_templates.Bat,
-		fmt.Sprintf(
-			drawer_templates.BatPartStatus,
-			d.t.Orange,
-			d.t.Black,
-			d.t.Orange,
-			status,
-		),
-		fmt.Sprintf(drawer_templates.BatPartWarning, d.t.Black, d.t.Orange, warn),
-		s.Percent,
-	)
+	statusTemplate := fmt.Sprintf(drawer_templates.BatPartStatus, d.t.Orange, d.t.Black, d.t.Orange, status)
+	warningTemplate := fmt.Sprintf(drawer_templates.BatPartWarning, d.t.Black, d.t.Orange, warn)
+
+	value := fmt.Sprintf(drawer_templates.Bat, statusTemplate, warningTemplate, s.Percent)
 
 	d.add(value)
 }
@@ -360,7 +363,7 @@ func (d *Drawer) drawNotificationsDisabled(state notifications_state.Stats) {
 }
 
 func (d *Drawer) print() {
-	_, err := util.ExecCmd("xsetroot -name", d._v)
+	_, err := util.ExecCmd("xsetroot", "-name", d._v)
 	if err != nil {
 		log.Println(
 			fmt.Sprintf(

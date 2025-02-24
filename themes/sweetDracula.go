@@ -12,7 +12,7 @@ func CreateThemeSweetDracula() *drawer_theme.Theme {
 		"#f1fa8c",
 		"#e78a4e",
 		"#bd93f9",
-		"#ff6c6b",
+		"#ff85ab",
 		"#8be9fd",
 		"#f8f8f2",
 	)

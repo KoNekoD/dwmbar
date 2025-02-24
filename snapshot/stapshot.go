@@ -9,6 +9,7 @@ import (
 	"main/state_providers/network_stat"
 	"main/state_providers/notifications_state"
 	"main/state_providers/volume_state"
+	"main/state_providers/weather_state"
 	"time"
 )
 
@@ -24,6 +25,7 @@ type DwmBarStatsSnapshot struct {
 	Cpu                int
 	NetworkStat        network_stat.Stats
 	NotificationsState notifications_state.Stats
+	WeatherState       *weather_state.Stats
 }
 
 func NewDwmBarStatsSnapshot() *DwmBarStatsSnapshot {

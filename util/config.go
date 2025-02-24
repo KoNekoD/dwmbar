@@ -15,6 +15,7 @@ type Config struct {
 	NoNotificationsState               bool
 	EnableNotificationsStateBgBlinking bool
 	Lang                               string
+	NoWeatherState                     bool
 }
 
 func NewConfig() *Config {
@@ -30,6 +31,7 @@ func NewConfig() *Config {
 	noNotificationsState := flag.Bool("noNotificationsState", false, "no notifications state")
 	enableNotificationsStateBgBlinking := flag.Bool("enableNotificationsStateBgBlinking", false, "enable notifications state background blinking")
 	lang := flag.String("lang", "ru", "lang")
+	NoWeatherState := flag.Bool("noWeather", false, "no weather state")
 
 	flag.Parse()
 
@@ -46,5 +48,6 @@ func NewConfig() *Config {
 		NoNotificationsState:               *noNotificationsState,
 		EnableNotificationsStateBgBlinking: *enableNotificationsStateBgBlinking,
 		Lang:                               *lang,
+		NoWeatherState:                     *NoWeatherState,
 	}
 }
