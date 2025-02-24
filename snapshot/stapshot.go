@@ -25,7 +25,7 @@ type DwmBarStatsSnapshot struct {
 	Cpu                int
 	NetworkStat        network_stat.Stats
 	NotificationsState notifications_state.Stats
-	WeatherState       *weather_state.Stats
+	WeatherState       weather_state.Stats
 }
 
 func NewDwmBarStatsSnapshot() *DwmBarStatsSnapshot {

@@ -54,11 +54,10 @@ func Get() (*Stats, error) {
 		if hasPrefix {
 			if isUp {
 				wirelessConnected = true
-				nameStr, errConn := getWirelessConnectionName(name)
+				wirelessInterfaceName = name
+				nameStr, errConn := getWirelessConnectionName(wirelessInterfaceName)
 				if errConn == nil {
 					wirelessConnectionName = nameStr
-				} else {
-					wirelessInterfaceName = name
 				}
 			}
 			continue
@@ -66,27 +65,28 @@ func Get() (*Stats, error) {
 	}
 
 	return &Stats{
-			WiredConnected:         wiredConnected,
-			WirelessConnected:      wirelessConnected,
-			WirelessConnectionName: wirelessConnectionName,
-			WiredInterfaceName:     wiredInterfaceName,
-			WirelessInterfaceName:  wirelessInterfaceName,
-		},
-		nil
+		WiredConnected:         wiredConnected,
+		WirelessConnected:      wirelessConnected,
+		WirelessConnectionName: wirelessConnectionName,
+		WiredInterfaceName:     wiredInterfaceName,
+		WirelessInterfaceName:  wirelessInterfaceName,
+	}, nil
 }
 
 func getWirelessConnectionName(iface string) (string, error) {
-	if commandExists("iwctl") {
+	switch true {
+	case hasCommand("iwctl"):
 		return getWirelessConnectionNameFromIwctl(iface)
-	} else if commandExists("wpa_cli") {
+	case hasCommand("wpa_cli"):
 		return getWirelessConnectionNameFromWPACli(iface)
-	} else if commandExists("nmcli") {
+	case hasCommand("nmcli"):
 		return getWirelessConnectionNameFromNmcli()
 	}
+
 	return "", errors.New("no supported software found to retrieve wireless connection information")
 }
 
-func commandExists(name string) bool {
+func hasCommand(name string) bool {
 	_, err := exec.LookPath(name)
 	return err == nil
 }

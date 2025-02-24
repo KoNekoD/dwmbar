@@ -1,5 +1,5 @@
-BIN_NAME = dwmbar
-LOCAL_DIR = $(HOME)/.dwm/bin
+BINARY = dwmbar
+LOCAL = $(HOME)/.dwm/bin
 INSTALL_DIR = /usr/local/bin
 
 .PHONY: all build install clean local_install
@@ -7,16 +7,17 @@ INSTALL_DIR = /usr/local/bin
 all: build
 
 build:
-	go build -o $(BIN_NAME)
-	strip $(BIN_NAME)
+	@echo "Building... $(BINARY)" && go build -o $(BINARY) && strip $(BINARY)
 
 install_local: build
-	mkdir -p $(BUILD_DIR)
-	cp $(BIN_NAME) $(LOCAL_DIR)/$(BIN_NAME)
+	@echo "Local Installing... $(BINARY)" && \
+	mkdir -p $(LOCAL) && \
+	cp $(BINARY) $(LOCAL)/$(BINARY)
 
 install: build
-	cp $(BIN_NAME) $(INSTALL_DIR)/$(BIN_NAME)
+	@echo "Installing... $(BINARY)" && \
+	mkdir -p $(INSTALL_DIR) && \
+	mv $(BINARY) $(INSTALL_DIR)/$(BINARY)
 
 clean:
-	rm -f $(BIN_NAME)
-	rm -f main
+	rm -f $(BINARY) ./main

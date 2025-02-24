@@ -8,7 +8,7 @@ const (
 	CpuTemp                   = "^c%s^" + LeftSep + "^c%s^^b%s^ 󰔄 %s "
 	MemoryUsage               = "^c%s^" + LeftSep + "^b%s^^c%s^^b%s^ 󰍛 %s "
 	Brightness                = "^c%s^" + LeftSep + "^b%s^^c%s^^b%s^ 󱩎 %d"
-	Weather                   = "^c%s^" + LeftSep + "^b%s^^c%s^  %s "
+	Weather                   = "^c%s^" + LeftSep + "^b%s^^c%s^ %s %s "
 	VolumeMuted               = "^c%s^" + LeftSep + "^b%s^^c%s^^b%s^ 󰝟 "
 	VolumePart0               = "󰝞"
 	VolumePartGT0             = "󰕿"

@@ -17,14 +17,14 @@ func Get(currentInterfaceName string) (*Stats, error) {
 	currentStats := findByName(stats, currentInterfaceName)
 	if currentStats == nil {
 		return nil, errors.New(
-			"can't get stats by provided interface(currentStats)",
+			"can't get network stats by provided interface(currentStats)",
 		)
 	}
 
 	currentStats2 := findByName(stats2, currentInterfaceName)
 	if currentStats2 == nil {
 		return nil, errors.New(
-			"can't get stats by provided interface(currentStats2)",
+			"can't get network stats by provided interface(currentStats2)",
 		)
 	}
 

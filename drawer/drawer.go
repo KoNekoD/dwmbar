@@ -81,7 +81,7 @@ func (d *Drawer) add(string string) *Drawer {
 	return d
 }
 
-func (d *Drawer) drawWeather(stats *weather_state.Stats) {
+func (d *Drawer) drawWeather(stats weather_state.Stats) {
 	if d.c.NoWeatherState {
 		return
 	}
@@ -91,6 +91,7 @@ func (d *Drawer) drawWeather(stats *weather_state.Stats) {
 		d.t.Black,
 		d.t.Black,
 		d.t.Green,
+		drawer_templates.WeatherEmoji(stats.Code),
 		stats.Temperature,
 	)
 
